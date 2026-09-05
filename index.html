@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Person ❤️</title>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600&family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Fredoka', cursive, sans-serif;
+            background: repeating-linear-gradient(90deg, #ffe5ec, #ffe5ec 30px, #ffc2d1 30px, #ffc2d1 60px);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: #4a3b69;
+        }
+
+        .card {
+            background: #fff0f5;
+            border: 4px solid #ffb3c6;
+            border-radius: 25px;
+            padding: 25px;
+            max-width: 480px;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+            display: none;
+            position: relative;
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .card.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        h1, h2 {
+            font-family: 'Pacifico', cursive;
+            color: #ff4d6d;
+            margin-bottom: 15px;
+        }
+
+        p { font-size: 1.1rem; margin-bottom: 15px; line-height: 1.5; color: #590d22; }
+
+        .btn-group { display: flex; justify-content: center; gap: 15px; margin-top: 15px; }
+        .btn {
+            background: #ff758f;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            font-size: 1.1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-family: 'Fredoka', sans-serif;
+            box-shadow: 0 4px 10px rgba(255, 117, 143, 0.4);
+            transition: all 0.2s;
+        }
+        .btn:hover { background: #ff4d6d; transform: translateY(-2px); }
+        .btn-no { background: #a2d2ff; color: #003049; }
+        .btn-no:hover { background: #8ecae6; }
+
+        .music-btn {
+            position: absolute; top: 15px; right: 15px;
+            background: #ff758f; color: white; border: none;
+            border-radius: 50%; width: 40px; height: 40px;
+            font-size: 1.2rem; cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        .pass-dots { display: flex; justify-content: center; gap: 8px; margin: 15px 0; }
+        .dot { width: 14px; height: 14px; border-radius: 50%; background: #ddd; border: 2px solid #ff758f; }
+        .dot.filled { background: #ff4d6d; }
+
+        .keypad { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; max-width: 220px; margin: 0 auto; }
+        .key {
+            background: #ffe5ec; border: 2px solid #ffb3c6; padding: 12px; font-size: 1.2rem;
+            border-radius: 12px; cursor: pointer; font-weight: bold; color: #590d22;
+        }
+        .key:active { background: #ffc2d1; }
+
+        .img-box {
+            width: 140px; height: 140px; border-radius: 50%; border: 4px solid #ff758f;
+            object-fit: cover; margin: 10px auto; display: block;
+        }
+
+        .reason-box {
+            background: #fff; padding: 15px; border-radius: 15px;
+            border: 2px dashed #ff758f; margin: 15px 0;
+            font-weight: bold; min-height: 70px;
+            display: flex; align-items: center; justify-content: center;
+        }
+
+        .gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin: 15px 0; }
+        .flip-card { background-color: transparent; height: 140px; perspective: 1000px; cursor: pointer; }
+        .flip-card-inner {
+            position: relative; width: 100%; height: 100%;
+            text-align: center; transition: transform 0.6s; transform-style: preserve-3d;
+        }
+        .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+        .flip-card-front, .flip-card-back {
+            position: absolute; width: 100%; height: 100%;
+            -webkit-backface-visibility: hidden; backface-visibility: hidden;
+            border-radius: 15px; border: 2px solid #ffb3c6; overflow: hidden;
+        }
+        .flip-card-front img { width: 100%; height: 100%; object-fit: cover; }
+        .flip-card-back {
+            background-color: #ffe5ec; color: #590d22;
+            transform: rotateY(180deg); display: flex;
+            align-items: center; justify-content: center;
+            padding: 10px; font-size: 0.9rem; font-weight: bold;
+        }
+
+        .coupon-container { display: flex; flex-direction: column; gap: 10px; margin: 15px 0; }
+        .coupon {
+            background: #fff; border: 2px dashed #ff4d6d;
+            padding: 12px; border-radius: 12px; cursor: pointer;
+            font-weight: bold; transition: all 0.3s;
+        }
+        .coupon.claimed { background: #ff758f; color: white; border-style: solid; }
+
+        .envelope { font-size: 80px; cursor: pointer; animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { transform: scale(0.95); } 50% { transform: scale(1.05); } 100% { transform: scale(0.95); } }
+        .letter-modal {
+            display: none; background: #fff; border: 3px dashed #ff758f; padding: 20px;
+            border-radius: 15px; text-align: left; margin-top: 15px; color: #590d22;
+        }
+
+        video { width: 100%; border-radius: 15px; border: 3px solid #ff758f; margin: 10px 0; }
+    </style>
+</head>
+<body>
+
+    <audio id="bgSong" loop>
+        <source src="bg_music.mp3" type="audio/mp3">
+    </audio>
+
+    <div class="card active" id="step1">
+        <h1>unlock our memories</h1>
+        <img src="https://placehold.co/150x150/ffc2d1/ffffff?text=Cute+Panda" class="img-box" alt="Cute Panda">
+        <p>Enter our passcode 🗝️</p>
+        <div class="pass-dots">
+            <div class="dot" id="dot0"></div>
+            <div class="dot" id="dot1"></div>
+            <div class="dot" id="dot2"></div>
+            <div class="dot" id="dot3"></div>
+            <div class="dot" id="dot4"></div>
+            <div class="dot" id="dot5"></div>
+        </div>
+        <div class="keypad">
+            <div class="key" onclick="pressKey('1')">1</div>
+            <div class="key" onclick="pressKey('2')">2</div>
+            <div class="key" onclick="pressKey('3')">3</div>
+            <div class="key" onclick="pressKey('4')">4</div>
+            <div class="key" onclick="pressKey('5')">5</div>
+            <div class="key" onclick="pressKey('6')">6</div>
+            <div class="key" onclick="pressKey('7')">7</div>
+            <div class="key" onclick="pressKey('8')">8</div>
+            <div class="key" onclick="pressKey('9')">9</div>
+            <div class="key" onclick="clearPass()">#</div>
+            <div class="key" onclick="pressKey('0')">0</div>
+            <div class="key" onclick="checkPass()">enter</div>
+        </div>
+    </div>
+
+    <div class="card" id="step2">
+        <button class="music-btn" onclick="toggleMusic()">🎵</button>
+        <img src="https://placehold.co/150x150/ff758f/ffffff?text=Sorry+Cat" class="img-box" alt="Sad Cat">
+        <h2>Are you still angry with me? 🥺</h2>
+        <p>I know I made a mistake... but I miss you!</p>
+        <div class="btn-group">
+            <button class="btn btn-no" onclick="nextStep(3)">YES (Angry 😤)</button>
+            <button class="btn" onclick="nextStep(4)">NO (Forgive ❤️)</button>
+        </div>
+    </div>
+
+    <div class="card" id="step3">
+        <button class="music-btn" onclick="toggleMusic()">🎵</button>
+        <img src="https://placehold.co/150x150/ff4d6d/ffffff?text=Crying+Bear" class="img-box" alt="Crying Bear">
+        <h2>Pleassse forgive me! 🥺👉👈</h2>
+        <p>আমি তোমায় অনেক ভালোবাসি, রাগ করে থেকো না প্লিজ!</p>
+        <button class="btn" onclick="nextStep(2)">Try Again 🙈</button>
+    </div>
+
+    <div class="card" id="step4">
+        <button class="music-btn" onclick="toggleMusic()">🎵</button>
+        <h2>Reasons Why I Love You 💖</h2>
+        <div class="reason-box" id="reasonText">Click the button below to see!</div>
+        <button class="btn" onclick="showNextReason()">Show Next Reason ✨</button>
+        <div style="margin-top: 15px;">
+            <button class="btn" onclick="nextStep(5)">Next Step 👉</button>
+        </div>
+    </div>
+
+    <div class="card" id="step5">
+        <button class="music-btn" onclick="toggleMusic()">🎵</button>
+        <h2>I'm Late For Letter Day 💌</h2>
+        <p>চিঠি দিবসে চিঠি দিতে পারিনি বলে মন খারাপ করেছিলে? তাই পুরো একটা ওয়েবসাইট বানিয়ে ফেললাম শুধু তোমার জন্য!</p>
+        <button class="btn" onclick="nextStep(6)">See Her Song 🎙️</button>
+    </div>
+
+    <div class="card" id="step6">
+        <button class="music-btn" onclick="toggleMusic()">🎵</button>
+        <h2>Your Beautiful Voice 🎙️✨</h2>
+        <video controls>
+            <source src="her_singing_video.mp4" type="video/mp4">
+        </video>
+        <button class="btn" onclick="nextStep(7)">See Memories 📸</button>
+    </div>
+
+    <div class="card" id="step7">
+        <button class="music-btn" onclick="toggleMusic()">🎵</button>
+        <h2>Our Memories 📸</h2>
+        <div class="gallery">
+            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front"><img src="https://placehold.co/200x200/ffb3c6/ffffff?text=Photo+1"></div>
+                    <div class="flip-card-back">Our First Special Date ❤️</div>
+                </div>
+            </div>
+            <div class="flip-card" onclick="this.classList.toggle('flipped')">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front"><img src="https://placehold.co/200x200/ffc2d1/ffffff?text=Photo+2"></div>
+                    <div class="flip-card-back">Late Night Endless Talks 🌙</div>
+                </div>
+            </div>
+        </div>
+        <p style="font-weight: bold; margin-top: 10px;">Our Favorite Video Clip 🎬</p>
+        <video controls>
+            <source src="our_memory_video.mp4" type="video/mp4">
+        </video>
+        <button class="btn" onclick="nextStep(8)">Get Your Coupons 🎁</button>
+    </div>
+
+    <div class="card" id="step8">
+        <button class="music-btn" onclick="toggleMusic()">🎵</button>
+        <h2>Your Love Coupons 🎟️</h2>
+        <p>Tap to claim your special coupons!</p>
+        <div class="coupon-container">
+            <div class="coupon" onclick="claimCoupon(this)">🍦 1x Free Ice Cream Date</div>
+            <div class="coupon" onclick="claimCoupon(this)">🫂 Unlimited Long Hugs</div>
+            <div class="coupon" onclick="claimCoupon(this)">👑 Win Any Argument (1 Time)</div>
+        </div>
+        <button class="btn" onclick="nextStep(9)">Read Final Letter 📜</button>
+    </div>
+
+    <div class="card" id="step9">
+        <button class="music-btn" onclick="toggleMusic()">🎵</button>
+        <h2>A Letter From My Heart 📜</h2>
+        <div class="envelope" onclick="openLetter()">✉️</div>
+        <p>Click on the envelope to open your letter!</p>
+        
+        <div class="letter-modal" id="letterModal">
+            <h3>My Dearest Love ❤️</h3>
+            <p>
+                চিঠি দিবসে তোমাকে চিঠি দিতে পারিনি, তাই এই ডিজিটাল খামে আমার মনের সব অনুভূতি গুছিয়ে পাঠালাম। 
+                কয়েকদিন ধরে আমার কোনো ভুলের জন্য রাগ করে থাকলে, আমি সত্যি খুব দুঃখিত।
+                <br><br>
+                তোমাকে ছাড়া আমার একটা দিনও ভালো কাটে না। এই গান, এই ছবি আর চিঠি শুধু তোমাকে মনে করিয়ে দেওয়ার জন্য—আমি তোমাকে কত ভালোবাসি! সব রাগ ভুলে একটা মিষ্টি হাসি দাও তো! 💖
+            </p>
+        </div>
+    </div>
+
+    <script>
+        let currentPass = "";
+        const correctPass = "191223"; // Updated Passcode
+
+        function pressKey(num) {
+            if (currentPass.length < 6) {
+                currentPass += num;
+                updateDots();
+            }
+        }
+        function clearPass() {
+            currentPass = "";
+            updateDots();
+        }
+        function updateDots() {
+            for (let i = 0; i < 6; i++) {
+                const dot = document.getElementById(`dot${i}`);
+                if (i < currentPass.length) dot.classList.add('filled');
+                else dot.classList.remove('filled');
+            }
+        }
+        function checkPass() {
+            if (currentPass === correctPass) {
+                nextStep(2);
+                toggleMusic();
+            } else {
+                alert("Wrong passcode! Try again.");
+                clearPass();
+            }
+        }
+
+        function nextStep(stepNum) {
+            document.querySelectorAll('.card').forEach(card => card.classList.remove('active'));
+            document.getElementById(`step${stepNum}`).classList.add('active');
+        }
+
+        const song = document.getElementById('bgSong');
+        let isPlaying = false;
+        function toggleMusic() {
+            if (isPlaying) {
+                song.pause();
+                isPlaying = false;
+            } else {
+                song.play();
+                isPlaying = true;
+            }
+        }
+
+        document.querySelectorAll('video').forEach(video => {
+            video.addEventListener('play', () => {
+                if (song && isPlaying) {
+                    song.pause();
+                    isPlaying = false;
+                }
+            });
+        });
+
+        const reasons = [
+            "1. তোমার মিষ্টি হাসি আমার দিন ভালো করে দেয়! 😊",
+            "2. রাগ করলে তোমাকে আরও বেশি কিউট লাগে! 🙈",
+            "3. তুমি আমাকে সবচেয়ে ভালো বোঝো। ❤️",
+            "4. তোমার সাথে কথা বললে সব চিন্তা দূর হয়ে যায়! ✨",
+            "5. তুমি আমার জীবনের সবচেয়ে সুন্দর উপহার! 👑"
+        ];
+        let reasonIndex = 0;
+        function showNextReason() {
+            document.getElementById('reasonText').innerText = reasons[reasonIndex];
+            reasonIndex = (reasonIndex + 1) % reasons.length;
+        }
+
+        function claimCoupon(element) {
+            element.classList.add('claimed');
+            element.innerText += " (Claimed! ✅)";
+        }
+
+        function openLetter() {
+            document.getElementById('letterModal').style.display = "block";
+        }
+    </script>
+</body>
+</html>
