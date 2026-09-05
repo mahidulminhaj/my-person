@@ -170,7 +170,7 @@
 
     <div class="card" id="step2">
         <button class="music-btn" onclick="toggleMusic()">🎵</button>
-        <img src="https://placehold.co/150x150/ff758f/ffffff?text=Sorry+Cat" class="img-box" alt="Sad Cat">
+<img src="pic2.jpeg" class="img-box" alt="Sad Cat">
         <h2>Are you still angry with me? 🥺</h2>
         <p>I know I made a mistake... but I miss you!</p>
         <div class="btn-group">
@@ -290,6 +290,9 @@
         function checkPass() {
             if (currentPass === correctPass) {
                 nextStep(2);
+                document.body.style.backgroundImage = "url('bg.jpeg')";
+        document.body.style.backgroundSize = "cover";
+        document.body.style.backgroundPosition = "center";
                 toggleMusic();
             } else {
                 alert("Wrong passcode! Try again.");
